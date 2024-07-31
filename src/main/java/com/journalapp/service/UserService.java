@@ -24,7 +24,6 @@ public class UserService {
 		return userRepository.save(user);
 	}
 
-	
 	public List<User> findAllUser() {
 		return userRepository.findAll();
 	}
@@ -34,10 +33,10 @@ public class UserService {
 		return user;
 	}
 
-	public User findByName(String name) {
-		User userName = userRepository.findByName(name);
-		return userName;
-	}
+//	public User findByName(String name) {
+//		User userName = userRepository.findByName(name);
+//		return userName;
+//	}
 
 	public User updateUser(User user, int id) {
 		User updatedUser = userRepository.findById(id)
@@ -45,6 +44,8 @@ public class UserService {
 
 		updatedUser.setName(user.getName());
 		updatedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+		updatedUser.setEmail(user.getEmail());
+		updatedUser.setRoles(user.getRoles());
 		return userRepository.save(updatedUser);
 	}
 
@@ -53,10 +54,4 @@ public class UserService {
 		userRepository.delete(user);
 
 	}
-
-//	public User createAdmin(User user) {
-//		user.setPassword(passwordEncoder.encode(user.getPassword()));
-//		user.setRoles(Arrays.asList("USER","ADMIN"));
-//		return userRepository.save(user);
-//	}
 }

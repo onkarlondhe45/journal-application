@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/getAll")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<List<User>> getAllUser(){
 		List<User> findAllUser = userService.findAllUser();
 		if(findAllUser!=null) {
@@ -45,6 +47,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/getById/{id}")
+	@PreAuthorize("hasAuthority('USER')")
 	public ResponseEntity<User> getUserById(@PathVariable int id){
 		User findById = userService.findById(id);
 		if(findById!=null) {
@@ -54,17 +57,8 @@ public class UserController {
 		}
 	}
 	
-	@GetMapping("/getByName/{name}")
-	public ResponseEntity<User> getUserByName(@PathVariable String name){
-		User findByUserName = userService.findByName(name);
-		if(findByUserName!=null) {
-			return new ResponseEntity<User>(findByUserName, HttpStatus.OK);
-		}else {
-			return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
-		}
-	}
-	
 	@PutMapping("/update/{id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable int id){
 		User updateUser = userService.updateUser(user, id);
 		if(updateUser!=null) {
@@ -75,6 +69,7 @@ public class UserController {
 	}
 	
 	@DeleteMapping("/delete/{id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<String> deleteUser(@PathVariable int id){
 		userService.deleteUser(id);
 		return new ResponseEntity<String>("user deleted successfully...!", HttpStatus.OK);
